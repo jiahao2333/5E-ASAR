@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>5EClient popup</title>
+<style>
+html,body{
+    margin: 0;padding: 0;
+    cursor: default;
+    font-family: 'Microsoft Yahei';
+    font-size: 14px;
+}
+a{
+    text-decoration: none;
+    color: #111;
+}
+.bar{
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    padding: 5px 5px 0 35px;
+    width: 260px;
+    height: 25px;
+    background: url(../images/logo_32X32.png) #0F151D no-repeat 5px 3px;
+    background-size: 22px 22px;
+    color: #ccc;
+    overflow: hidden;
+}
+.close{
+    float: right;
+    width: 18px;
+    height: 18px;
+    background-size: 18px 18px;
+    border: none;
+    opacity: .5;
+    background-color: transparent;
+    cursor: pointer;
+    background-image: url(../images/win-close.svg);
+}
+.close:hover{
+    opacity: 1;
+}
+.wrap{
+    padding: 10px;
+    width: 280px;
+    height: 150px;
+    overflow: hidden;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    background: linear-gradient(#0F151D, #1E2B3E);
+}
+.image{
+    display: block;
+    float: left;
+    margin-right: 10px;
+}
+.image img{
+    border: 0;
+    max-width: 100px;
+    max-height: 160px;
+}
+.title a{
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
+}
+.content{
+    padding-top: 10px;
+    max-width: 280px;
+    font-size: 12px;
+    line-height: 1.5;
+    word-break: break-all;
+    text-overflow:ellipsis;
+}
+.content a{
+    color: #999;
+}
+</style>
+</head>
+<body onselectstart="return false">
+<div class="bar">5E对战平台消息<a class="close" href="javascript:close();"></a></div>
+<div class="wrap">
+    <div class="image" id="image"></div>
+    <div class="title" id="title"></div>
+    <div class="content" id="content"></div>
+</div>
+</body>
+<script>
+var electron    = require('electron'),
+    ipcRenderer = electron.ipcRenderer,
+    shell       = electron.shell,
+    curWindow   = electron.remote.getCurrentWindow();
+
+function close(){
+    curWindow.close();
+}
+
+function link(url){
+    shell.openExternal(url);
+    setTimeout(() => {
+        close();
+    }, 1000);
+}
+
+ipcRenderer.on('init', function(e, msg){
+    var link_url = msg['link_url'] ? msg['link_url'] : '';
+
+    if(msg['image_url']){
+        document.getElementById('image').innerHTML = '<a href="javascript:link(\'' + link_url + '\');"><img src="' + msg['image_url'] + '"></a>';
+        document.getElementById('image').style.display = 'block';
+    }
+    if(msg['title']){
+        document.getElementById('title').innerHTML = '<a href="javascript:link(\'' + link_url + '\');">' + msg['title'] + '</a>';
+    }
+    if(msg['content']){
+        document.getElementById('content').innerHTML = '<a href="javascript:link(\'' + link_url + '\');">' + msg['content'] + '</a>';
+    }
+});
+</script>
+</html>

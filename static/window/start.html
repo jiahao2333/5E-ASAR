@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>5E对战平台</title>
+<style>
+    html,
+    body{
+        padding: 0;
+        margin: 0;
+        font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        -webkit-user-select: none;
+    }
+    img{display: block;pointer-events: none;}
+    .box{
+        width: 800px;
+        height: 720px;
+        position: relative;
+        overflow: hidden;
+    }
+    .main-box{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        height: 444px;
+    }
+    .logo-main{
+        position: relative;
+        animation: logo .7s ease;
+    }
+    .logo-rel{
+        width: 319.5px;
+    }
+    .shadow{
+        position: absolute;
+        top: -84.75px;
+        left: -98.25px;
+        z-index: -1;
+        opacity: 0;
+        animation: logo_shadow 2.6s ease .6s infinite;
+        width: 512.25px;
+    }
+    .logo-main img{
+        margin: 0 auto;
+    }
+    .left-5{
+        position: absolute;
+        top: 174.75px;
+        left: 33.75px;
+        transform: translate(-180px);
+        opacity: 0;
+        animation: left_5 .36s ease .1s forwards,
+                   delay_opacity  .26s ease .2s forwards;
+        width: 118.5px;
+    }
+    .right-e{
+        position: absolute;
+        top: 174.75px;
+        right: 33.75px;
+        transform: translate(180px);
+        opacity: 0;
+        animation: right_e .36s ease .1s forwards,
+                   delay_opacity  .26s ease .2s forwards;
+        width: 124.5px;
+    }
+    .text-img{
+        position: absolute;
+        bottom: 53px;
+        left: 50%;
+        transform: translate(-50%);
+        width: 189px;
+        height: 20.25px;
+        background: url(../images/web.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 75%;
+        opacity: 0;
+        animation: opacity_animation .1s ease .5s forwards;
+    }
+    .progress-box{
+        position: absolute;
+        top: 335.25px;
+        left: 45.75px;
+        width: 225px;
+        height: 16.5px;
+        background: rgba(19,14,13,1);
+        border-radius: 11px;
+        opacity: 0;
+        animation: opacity_animation .2s ease .7s forwards;
+        overflow: hidden;
+        text-align: center;
+        line-height: 16.5px;
+        font-size:12px;
+    }
+    .progress-box span{
+        position: relative;
+        color:rgba(255,255,255,1);
+    }
+    #progress{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 16.5px;
+        background:rgba(53,176,25,1);
+        /* box-shadow:0px 0px 13px 0px rgba(111,254,99,1); */
+        border-radius:11px;
+        transition: box-shadow,width .3s,.06s;
+    }
+    #slow{
+        position: absolute;
+        top: 360px;
+        left: 50%;
+        transform: translate(-50%);
+        font-size: 12px;
+        color:rgba(255,255,255,1);
+        background: rgba(0,0,0,.8);
+        padding: 7.5px 11.25px;
+        z-index: 1;
+        border-radius: 6px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity .3s;
+    }
+    #slow::before{
+        content: '';
+        position: absolute;
+        top: -10.5px;
+        left: 50%;
+        transform: translate(-50%);
+        border: 5.25px solid;
+        border-color: transparent;
+        border-bottom-color: rgba(0,0,0,.8);
+        pointer-events: none;
+    }
+    #slow a{
+        color: rgba(53,176,25,1);
+    }
+    @keyframes logo {
+        0%{
+            opacity: 0;
+            transform: scale(1.8);
+        }
+        20%{
+            opacity: 0;
+            transform: scale(1.8);
+        }
+        100%{
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    @keyframes logo_shadow {
+        0%{
+            opacity: .05;
+        }
+        50%{
+            opacity: 1;
+        }
+        100%{
+            opacity: .05;
+        }
+    }
+    @keyframes left_5 {
+        0%{
+            transform: translate(-135px);
+        }
+        100%{
+            transform: translate(0);
+        }
+    }
+    @keyframes right_e {
+        0%{
+            transform: translate(135px);
+        }
+        100%{
+            transform: translate(0);
+        }
+    }
+    @keyframes delay_opacity {
+        0%{
+            opacity: 0;
+        }
+        100%{
+            opacity: 1;
+        }
+    }
+    @keyframes opacity_animation {
+        0%{
+            opacity: 0;
+        }
+        100%{
+            opacity: 1;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="box">
+        <div class="main-box">
+            <div class="logo-main">
+                <img src="../images/di.png" class="logo-rel" />
+                <img src="../images/5e-logo-bg.png" class="shadow"/>
+            </div>
+            <img src="../images/5.png" class="left-5" alt=""/>
+            <img src="../images/E.png" class="right-e" alt=""/>
+            <div class="progress-box">
+                <div id="progress"></div>
+                <span id="text-tip">正在检测升级(Checking) ...</span>
+                <span id="text-progress"></span>
+            </div>
+            <div id="slow">
+                当前网速较慢，建议下载最新安装包 <a onclick="openExternal('https://www.5eplay.com/', true);" href="javascript:;" target="_blank">点击下载</a>
+            </div>
+            <div class="text-img"></div>
+        </div>
+    </div>
+</body>
+<script>
+var timer, percent = 0, complete = false,
+    updateInterval = 100, checkingInterval = 25,
+    updateStep = 0.2, checkingStep = 0.8,
+    progressBoxEl = document.querySelector('.progress-box'),
+    progressEl = document.getElementById('progress'),
+    progressTextEl = document.getElementById('text-progress'),
+    tipEl = document.getElementById('text-tip'),
+    isTextShadow = false,
+    delay = 900;
+
+var ipcRenderer = require('electron').ipcRenderer;
+
+ipcRenderer.on('update', function(e, msg){
+    var slowEl = document.getElementById('slow');
+    
+    // 正在检查版本
+    if(msg === 'checking'){
+        tipEl.innerHTML = '正在检测升级(Checking) ...';
+        progressTextEl.innerHTML = '';
+        progressEl.style.width = 0;
+        progressEl.style.boxShadow = 'none';
+        progressBoxEl.style.background = 'none';
+    }
+    // 发现版本准备更新
+    if(msg === 'available'){
+        tipEl.innerHTML = '发现新版本，开始下载(Downloading) ...';
+        progressTextEl.innerHTML = '';
+        progressEl.style.width = 0;
+        progressEl.style.boxShadow = 'none';
+        progressBoxEl.style.background = '#193844';
+
+        setTimeout(function(){
+            if( ! complete){
+                slowEl.style.opacity = '1';
+                slowEl.style.pointerEvents = 'auto';
+            }
+        }, 300000);
+    }
+    // 没有更新，启动平台
+    if(msg === 'notAvailable' || msg === 'error'){
+        tipEl.innerHTML = '当前为最新版本，正在启动(Starting) ...';
+        progressTextEl.innerHTML = '';
+        progressEl.style.width = 0;
+        progressEl.style.boxShadow = 'none';
+        progressBoxEl.style.background = 'none';
+    }
+    // 下载完毕安装
+    if(msg === 'downloaded'){
+        complete = true;
+        tipEl.innerHTML = '下载完成，准备安装(Updating) ...';
+        progressTextEl.innerHTML = '';
+        progressEl.style.width = 100 + '%';
+        progressBoxEl.style.overflow = 'unset';
+        progressEl.style.boxShadow = '0px 0px 13px 0px rgba(111,254,99,1)';
+        progressBoxEl.style.background = 'none';
+        slowEl.style.opacity = '0';
+        slowEl.style.pointerEvents = 'none';
+    }
+});
+// 下载中进度条
+ipcRenderer.on('update-progress', function(e, msg){
+    var dps = msg.bytesPerSecond > 1048576 ? (Math.round((msg.bytesPerSecond / 1048576)*10)/10) + 'M/s': (Math.round((msg.bytesPerSecond / 1024)*10)/10) + 'K/s';
+    tipEl.innerHTML = parseInt(msg.percent) + '% ' + '正在下载 ... ';
+    progressEl.style.width = parseInt(msg.percent) + '%';
+    progressTextEl.innerHTML = dps;
+    progressBoxEl.style.background = '#193844';
+    if(msg.percent >= 100){
+        progressBoxEl.style.overflow = 'unset';
+        progressEl.style.boxShadow = '0px 0px 13px 0px rgba(111,254,99,1)';
+    }
+});
+
+function openExternal(url, close = false){
+    require('electron').shell.openExternal(url);
+    if(close){
+        setTimeout(() => {
+            require('electron').remote.app.quit();
+        }, 2000);
+    }
+}
+</script>
+</html>

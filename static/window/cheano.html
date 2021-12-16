@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CHEANO LOADING...</title>
+<style>
+html,body{
+    margin: 0;padding: 0;
+    cursor: default;
+    font-family: 'Microsoft Yahei';
+}
+body{
+    position: relative;
+    width: 662px;
+    height: 374px;
+	overflow: hidden;
+}
+p{margin:0;padding: 0;}
+.fleft{float: left;}
+.clearfix::after{
+    content: '';
+    display: block;
+    clear: both;
+}
+.wrap{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width:429px;
+    height:139px;
+    background: rgba(0,0,0,.01);
+    background-image: linear-gradient(to bottom,rgba(67,75,92,1),rgba(32,36,45,1));
+    border: 2px solid;
+    border-image: linear-gradient(to top, rgba(37,41,49,.5), rgba(68,78,96,1));
+    box-shadow: 0px 0px 15px 0px rgba(66,86,111,0.56), 0px 0px 30px 0px rgba(66,86,111,0.56);
+    border-radius: 4px;
+    border-image-slice: 1;
+}
+.shadow-bg{
+    position: absolute;
+    top: -118px;
+    left: -116px;
+    width: 662px;
+    height: 374px;
+    background-image: url(../images/bg-hxd.png);
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    animation: opacity_animate 3.8s linear infinite;
+}
+.main-body{
+
+}
+.left-logo{
+    width: 99px;
+    height: 113px;
+    background-image: url(../images/tb-fzb.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 14px 0 0 21px;
+}
+.right-info{
+    margin-left: 20px;
+}
+.progress-box{
+    width: 286px;
+    height: 67px;
+    background-image: url(../images/fzb-jdtx.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    top: -11px;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 22px 19px;
+}
+#progress{
+    width: 0;
+    height: 23px;
+    overflow: hidden;
+    transition: width 0.01s;
+    box-shadow: 0 0 20px rgba(12,164,0,.5);
+    border-radius: 23px;
+}
+#progress img{
+    display: block;
+    width: 248px;
+    height: 23px;
+}
+.text-info{
+    text-align: right;
+    font-size:16px;
+    font-weight:400;
+    color:rgba(161,174,201,1);
+    margin: 30px 21px 0 0;
+}
+.text-info-tip{
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(97,106,125,1);
+    text-align: right;
+    margin: -11px 21px 0 0;
+}
+.ellipsis-box{
+    display: inline-block;
+    width: 12px;
+    text-align: left;
+}
+.ellipsis{
+    display: inline-block;
+    width: 12px;
+    overflow: hidden;
+    animation: ellipsis_animation 1s step-end infinite;
+    line-height: 12px;
+}
+@keyframes ellipsis_animation {
+    0% {
+        width: 4px;
+    }
+    33% {
+        width: 8px;
+    }
+    66% {
+        width: 12px;
+    }
+    100% {
+        width: 12px;
+    }
+}
+@keyframes opacity_animate{
+    0%{
+      opacity: 0;
+      filter: brightness(100%);
+    }
+    45%{
+      opacity: 1;
+      filter: brightness(130%);
+    }
+    55%{
+      filter: brightness(130%);
+      opacity: 1;
+    }
+    100%{
+      filter: brightness(100%);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body onselectstart="return false">
+<div class="wrap">
+    <div class="main-body clearfix">
+        <div class="shadow-bg"></div>
+        <div class="left-logo fleft"></div>
+        <div class="right-info fleft">
+            <p class="text-info">反作弊检测中<span class="ellipsis-box"><span class="ellipsis">...</span></span>
+            </p>
+            <div class="progress-box">
+                <div id="progress">
+                    <img src="../images/fzb-jdts.png"/>
+                </div>
+            </div>
+            <p class="text-info-tip">Powered  by 5EPLAY</p>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+var countGo,
+    countStatus = false,
+    progress = document.getElementById('progress'),
+    progreessWidth = 0,
+    max = 40 + parseInt(Math.random()*20),
+    timeoutKey = void 0;
+var countDown = function(count, max, isFull){
+    clearInterval(countGo)
+    countGo = setInterval(function(){
+        progreessWidth = progreessWidth >= max ? max : progreessWidth + max / (count * 40);
+        progress.style.width = progreessWidth + '%';
+        if(progreessWidth >= max){
+            clearInterval(countGo);
+            if( !isFull ){
+                rollProgress();
+            }
+        }
+    }, 25);
+};
+function rollProgress(){
+    timeoutKey = setTimeout(function() {
+        if( max === 100 ){
+            return;
+        }
+        max += Math.random() * 2;
+        if( max > 100 ){
+            max = 100
+        }
+        progreessWidth = max;
+        progress.style.width = max + '%';
+        rollProgress();
+    }, Math.random()*500);
+}
+var countInit = function(){
+    clearInterval(countGo);
+    progress.style.width = '0%';
+    countStatus = false;
+};
+var msgData = {
+    checking: '正在检测升级 ...',
+    available: '正在更新反作弊 ...',
+    notAvailable: '正在启动游戏 ...',
+    downloaded: '正在启动游戏 ...',
+};
+countDown( 2, max );
+var ipcRenderer = require('electron').ipcRenderer;
+ipcRenderer.on('update', function(e, msg){
+    var message = msgData[msg] ? msgData[msg] : msg;
+    if(msg === 'notAvailable' || msg === 'downloaded'){
+        clearInterval(countGo);
+        clearTimeout(timeoutKey);
+        if( max >= 100 ){
+            return;
+        }
+        max = 100;
+        progress.style.width = max + '%';
+        // countDown( .8, max, true );
+    }
+});
+</script>
+</html>

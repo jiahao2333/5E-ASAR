@@ -1,0 +1,21 @@
+{
+    "name": "5EClient",
+    "version": "6.1.21",
+    "main": "app.js",
+    "productName": "5E对战平台",
+    "description": "5E对战平台 - 亚洲专业的CSGO对战平台 - 5EPlay.com",
+    "private": true,
+    "author": "杭州赛凡科技有限公司",
+    "homepage": "https://www.5eplay.com",
+    "dependencies": {
+        "adm-zip": "^0.5.6",
+        "axios": "^0.21.4",
+        "big-integer": "^1.6.48",
+        "electron-store": "^8.0.0",
+        "electron-updater": "^4.3.8",
+        "iconv-lite": "^0.6.3",
+        "ini": "^2.0.0",
+        "moment": "^2.29.1",
+        "ping": "^0.4.1"
+    }
+}

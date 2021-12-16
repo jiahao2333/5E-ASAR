@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>5E对战平台</title>
+<style>
+    html,
+    body{
+        padding: 0;
+        margin: 0;
+        width: 640px;
+        height: 480px;
+        overflow: hidden;
+        font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    }
+
+    .title-bar{
+        position:absolute;
+        top:0;
+        right:0;
+        width:100%;
+        cursor: ns-resize;
+        height: 25px;
+        -webkit-app-region: drag;
+        pointer-events: none;
+        z-index: 1001;
+    }
+    .win-buttons {
+        position: absolute;
+        top: 15px;
+        right: 16px;
+        pointer-events: auto;
+        -webkit-app-region: no-drag;
+        z-index: 1001;
+    }
+    .win-close{
+        background-image: url(../images/win-close.svg);
+    }
+    .win-buttons button{
+        width: 18px;
+        height: 18px;
+        background-size: 18px 18px;
+        -webkit-transition: opacity .2s;
+        transition: opacity .2s;
+        border: none;
+        background-color: transparent;
+        opacity: .3;
+        cursor: pointer;
+    }
+    .win-buttons button:hover{
+        opacity: 1;
+        filter: none;
+    }
+
+    .wrap{
+        z-index: 1;
+        position: relative;
+        width: 640px;
+        height: 480px;
+        background: #282B30;
+        color: #fff;
+        font-size: 12px;
+    }
+    .header{
+        padding: 15px 0 15px 85px;
+        height: 60px;
+        background: #202226;
+        background: url(../images/logo_64.png) #202226 no-repeat 15px 15px;
+    }
+    .header h1, h3{
+        margin: 0; padding: 0;
+        font-weight: normal;
+    }
+    .header h1{
+        padding-top: 10px;
+        font-size: 18px;
+        color: #ccc;
+    }
+    .header h3{
+        padding-top: 5px;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .check-list{
+        margin-left: 20px;
+    }
+    .check-list ul, li{
+        margin: 0;padding: 0;
+        list-style: none;
+    }
+    .check-list li{
+        margin-top: 5px;
+        height: 40px;
+        padding: 5px;
+    }
+    .check-list li:after{
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+    .check-list li .item{
+        font-size: 16px;
+        color: #ccc;
+    }
+    .check-list li .desc{
+        padding-top: 5px;
+        font-size: 12px;
+        color: #666;
+    }
+    .check-list li .result{
+        float: left;
+        margin-right: 20px;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #999;
+        border-radius: 40px;
+        text-align: center;
+        line-height: 40px;
+        color: #666;
+    }
+    .check-button{
+        margin-top: 20px;
+        text-align: center;
+    }
+    .check-button a{
+        display: inline-block;
+        width: 180px;
+        height: 40px;
+        line-height: 40px;
+        background: #00aee6;
+        border-radius: 3px;
+        text-align: center;
+        color: #fff;
+        font-size: 16px;
+        text-decoration: none;
+    }
+    .check-button a:hover{
+        background-color: #15C5FF;
+    }
+    .check-button a.green{background: #62bb46;}
+    .check-button a.green:hover{background: #7CC664;}
+
+    .check-result{
+        /* display: none; */
+        padding-top: 20px;
+        font-size: 16px;
+        text-align: center;
+    }
+</style>
+</head>
+<body onselectstart="return false">
+    <div class="title-bar">
+        <div class="win-buttons">
+            <button id="win-close" class="win-close" title="关闭"></button>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div class="header">
+            <h1>5E对战平台故障诊断工具</h1>
+            <h3>诊断与解决无法打开平台、白屏、更新失败等故障</h3>
+        </div>
+
+        <div class="check-list">
+            <ul>
+                <li>
+                    <div id="item_0" class="result">未检查</div>
+                    <div class="item">检查电脑能否上网</div>
+                    <div class="desc">检查网线是否正常、网卡驱动是否正常、与外网是否连通等</div>
+                </li>
+                <li>
+                    <div id="item_1" class="result">未检查</div>
+                    <div class="item">DNS服务配置（重要）</div>
+                    <div class="desc">如果你能上QQ，但无法打开5EPlay、5E对战平台一般是DNS服务出现问题</div>
+                </li>
+                <li>
+                    <div id="item_2" class="result">未检查</div>
+                    <div class="item">网络延迟检查</div>
+                    <div class="desc">登录平台非常缓慢，加载图片很卡、CSGO跳Ping等很有可能是网络带宽异常</div>
+                </li>
+                <li>
+                    <div id="item_3" class="result">未检查</div>
+                    <div class="item">系统代理检查</div>
+                    <div class="desc">使用加速器、VPN的系统代理之后可能会导致无法打开平台界面</div>
+                </li>
+                <li>
+                    <div id="item_4" class="result">未检查</div>
+                    <div class="item">操作系统时间检查</div>
+                    <div class="desc">操作系统电脑时间如果误差过大会造成安全证书失效无法打开5E平台</div>
+                </li>
+            </ul>
+            <div class="check-button">
+                <a id="check" href="javascript:;">立即诊断</a>
+            </div>
+            <div id="check_result" class="check-result"></div>
+        </div>
+    </div>
+</body>
+<script>
+var electron    = require('electron'),
+    remote      = electron.remote,
+    app         = remote.app,
+    shell       = electron.shell,
+    ipcRenderer = electron.ipcRenderer;
+
+// remote.getCurrentWindow().setSize(640, 480);
+// remote.getCurrentWindow().center();
+
+document.getElementById('win-close').addEventListener('click', function (e){
+    app.quit();
+});
+
+var timer;
+var checkBtn    = document.getElementById('check');
+var checkResult = document.getElementById('check_result');
+var interfaces  = [];
+var goodDns     = ['223.5.5.5', '114.114.114.114'];
+var checkItem   = [0, 0, 0, 1, 0];  // 0 未检测 1 通过 -1 异常
+
+checkBtn.addEventListener('click', function (e){
+    var faultId = checkBtn.getAttribute('data-fault');
+    if(+faultId === 1){
+        return repairDns();
+    }
+
+    checkBtn.innerHTML = '正在检查...';
+    for (var i = 0; i < checkItem.length; i++) {
+        document.getElementById('item_' + i).innerHTML = '检查中';
+    };
+
+    // 检查DNS
+    var dnsList    = [];
+    interfaces = ipcRenderer.sendSync('get_interfaces');
+    interfaces = interfaces.data;
+
+    for (var i = 0; i < interfaces.length; i++) {
+        var dns = ipcRenderer.sendSync('get_dns', {name: interfaces[i]});
+        if(dns.data.length > 0){
+            dnsList = dnsList.concat(dns.data);
+        }
+    };
+
+    // 不存在交集 则 不通过推进DNS
+    if(dnsList.filter(function(v){ return goodDns.indexOf(v) > -1 }).length === 0){
+        checkItem[1] = -1;
+    }else{
+        checkItem[1] = 1;
+    }
+
+    // 测Ping
+    ipcRenderer.send('ping', {server: ['101.226.103.106:80', 'www.baidu.com:80', 'hz.csgo.5ewin.com:27015', 'bj.csgo.5ewin.com:27015']});
+
+    // 检查系统时间
+    var ajax = new XMLHttpRequest();
+    ajax.open('get','http://time.5eplay.com/');
+    ajax.send();
+    ajax.onreadystatechange = function (){
+        if (ajax.readyState === 4 && ajax.status === 200) {
+            var local_time = Math.round(new Date().getTime()/1000);
+            var server_time = ajax.responseText;
+            if(Math.abs(server_time - local_time) > 86400){
+                checkItem[4] = -1;
+            }else{
+                checkItem[4] = 1;
+            }
+        }
+    }
+
+    timer = setInterval(function(){
+        var checked = 0;
+
+        for (var i = 0; i < checkItem.length; i++) {
+            if(checkItem[i] !== 0){
+                checked ++;
+                document.getElementById('item_' + i).innerHTML         = checkItem[i] === 1 ? '正常' : '异常';
+                document.getElementById('item_' + i).style.color       = checkItem[i] === 1 ? '#0f0' : '#f00';
+                document.getElementById('item_' + i).style.borderColor = checkItem[i] === 1 ? '#0f0' : '#f00';
+            }
+        };
+
+        // 检测完成
+        if(checked === checkItem.length){
+            clearInterval(timer);
+
+            if(checkItem.indexOf(-1) === -1){
+                checkBtn.innerHTML = '检查完成，未发现问题';
+            }
+
+            if(checkItem[0] === -1){
+                checkBtn.style.display    = 'none';
+                checkResult.innerHTML     = '无法连接网络，请检查网线、路由器等设置';
+                checkResult.style.color   = '#f00';
+                checkResult.style.display = 'block';
+                return;
+            }
+
+            if(checkItem[1] === -1){
+                checkBtn.innerHTML = '立即修复';
+                checkBtn.className = 'green';
+                checkBtn.setAttribute('data-fault', 1);
+                return;
+            }
+
+            if(checkItem[2] === -1){
+                checkBtn.style.display    = 'none';
+                checkResult.innerHTML     = '当前网络延迟较大，请尝试关闭下载软件、检查系统进程、重启路由器';
+                checkResult.style.color   = '#f00';
+                checkResult.style.display = 'block';
+                return;
+            }
+
+            if(checkItem[4] === -1){
+                checkBtn.style.display    = 'none';
+                checkResult.innerHTML     = '当前计算机系统时间不正确，请在电脑右下角手工设置正确时间';
+                checkResult.style.color   = '#f00';
+                checkResult.style.display = 'block';
+                return;
+            }
+        }
+    }, 1000);
+});
+
+ipcRenderer.on('ping', (e, msg) => {
+    var result  = msg.data.result;
+    var connect = false;
+    var network = false;
+
+    for (var ip in result) {
+        if(result[ip] > 0){
+            connect = true;
+        }
+        if(result[ip] > 0 && result[ip] < 100){
+            network = true;
+        }
+    };
+
+    checkItem[0] = connect ? 1 : -1;
+    checkItem[2] = network ? 1 : -1;
+});
+
+function repairDns(){
+    for (var i = 0; i < interfaces.length; i++) {
+        ipcRenderer.sendSync('set_dns', {name: interfaces[i], dns: goodDns});
+    };
+
+    document.getElementById('item_1').innerHTML         = '已修复';
+    document.getElementById('item_1').style.color       = '#0f0';
+    document.getElementById('item_1').style.borderColor = '#0f0';
+
+    checkBtn.style.display    = 'none';
+    checkResult.innerHTML     = '修复完成，请重启平台';
+    checkResult.style.color   = '#0f0';
+    checkResult.style.display = 'block';
+}
+
+function openExternal(url, close = false){
+    shell.openExternal(url);
+    if(close){
+        app.quit();
+    }
+}
+
+if ( ! Array.indexOf) {
+    Array.prototype.indexOf = function (obj) {
+        for (var i = 0; i < this.length; i++) {
+            if (this[i] == obj) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
+</script>
+</html>
